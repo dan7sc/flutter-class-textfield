@@ -28,7 +28,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String text = "";
-  FocusNode _focusNode = FocusNode();
+  FocusNode _emailFocusNode = FocusNode();
+  FocusNode _cpfFocusNode = FocusNode();
+  FocusNode _passwordFocusNode = FocusNode();
+
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _cpfController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   void _updateText(String newText) {
     setState(() {
@@ -46,17 +52,35 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              text,
-              style: TextStyle(
-                fontSize: 30.0,
-                color: Colors.black,
+            // Text(
+            //   text,
+            //   style: TextStyle(
+            //     fontSize: 30.0,
+            //     color: Colors.black,
+            //   ),
+            // ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                focusNode: _cpfFocusNode,
+                controller: _cpfController,
+                textInputAction: TextInputAction.next,
+                onChanged: (value) => _updateText(value),
+                autocorrect: false,
+                cursorColor: Colors.red,
+                cursorHeight: 16.0,
+                cursorRadius: Radius.circular(90),
+                cursorWidth: 16.0,
+                obscureText: false,
+                enabled: true,
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
-                focusNode: _focusNode,
+                focusNode: _emailFocusNode,
+                controller: _emailController,
+                textInputAction: TextInputAction.next,
                 onChanged: (value) => _updateText(value),
                 autocorrect: false,
                 cursorColor: Colors.red,
@@ -65,6 +89,26 @@ class _MyHomePageState extends State<MyHomePage> {
                 cursorWidth: 16.0,
                 obscureText: false,
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                focusNode: _passwordFocusNode,
+                controller: _passwordController,
+                onChanged: (value) => _updateText(value),
+                autocorrect: false,
+                cursorColor: Colors.red,
+                cursorHeight: 16.0,
+                cursorRadius: Radius.circular(90),
+                cursorWidth: 16.0,
+                obscureText: true,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _emailFocusNode.requestFocus();
+              },
+              child: Text("Entrar"),
             ),
           ],
         ),
