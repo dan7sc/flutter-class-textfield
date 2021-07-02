@@ -34,12 +34,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _cpfController = TextEditingController();
+  // TextEditingController _cpfController =
+      // TextEditingController(text: "123.456.789-00");
   TextEditingController _passwordController = TextEditingController();
 
   void _updateText(String newText) {
     setState(() {
       text = newText;
     });
+  }
+
+  @override
+  void initState() {
+    Future.delayed(Duration(seconds: 2)).then((value) {
+      _cpfController = TextEditingController(text: "123.456.789-00");
+      setState(() {});
+    });
+    super.initState();
   }
 
   @override
