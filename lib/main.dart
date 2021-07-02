@@ -28,7 +28,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String text = "";
+  String _text = "";
   FocusNode _emailFocusNode = FocusNode();
   FocusNode _cpfFocusNode = FocusNode();
   FocusNode _passwordFocusNode = FocusNode();
@@ -39,17 +39,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _updateText(String newText) {
     setState(() {
-      text = newText;
-      // _passwordController =
-        // TextEditingController(text: _passwordController.text.toUpperCase());
+      _text = newText;
     });
+    FocusScope.of(context).unfocus();
+    _emailController.clear();
   }
 
   @override
   void initState() {
     Future.delayed(Duration(seconds: 2)).then((value) {
       _cpfController = TextEditingController(text: "123.456.789-00");
-      _emailController = TextEditingController(text: "dan@email.com");
       setState(() {});
     });
     super.initState();
@@ -62,78 +61,96 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // Text(
-            //   text,
-            //   style: TextStyle(
-            //     fontSize: 30.0,
-            //     color: Colors.black,
-            //   ),
-            // ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                focusNode: _cpfFocusNode,
-                controller: _cpfController,
-                textInputAction: TextInputAction.next,
-                onChanged: (value) => _updateText(value),
-                autocorrect: false,
-                cursorColor: Colors.red,
-                cursorHeight: 16.0,
-                cursorRadius: Radius.circular(90),
-                cursorWidth: 16.0,
-                obscureText: false,
-                enabled: true,
-                keyboardType: TextInputType.number,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              // Text(
+              //   text,
+              //   style: TextStyle(
+              //     fontSize: 30.0,
+              //     color: Colors.black,
+              //   ),
+              // ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  focusNode: _cpfFocusNode,
+                  controller: _cpfController,
+                  textInputAction: TextInputAction.next,
+                  onChanged: (value) => _updateText(value),
+                  autocorrect: false,
+                  cursorColor: Colors.red,
+                  cursorHeight: 16.0,
+                  cursorRadius: Radius.circular(90),
+                  cursorWidth: 16.0,
+                  obscureText: false,
+                  enabled: true,
+                  autofocus: true,
+                  keyboardType: TextInputType.number,
+                  onEditingComplete: () {
+                    _passwordFocusNode.requestFocus();
+                  },
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                focusNode: _emailFocusNode,
-                controller: _emailController,
-                textInputAction: TextInputAction.next,
-                onChanged: (value) => _updateText(value),
-                autocorrect: false,
-                cursorColor: Colors.red,
-                cursorHeight: 16.0,
-                cursorRadius: Radius.circular(90),
-                cursorWidth: 16.0,
-                obscureText: false,
-                keyboardType: TextInputType.emailAddress,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  focusNode: _emailFocusNode,
+                  controller: _emailController,
+                  textInputAction: TextInputAction.next,
+                  onChanged: (value) => _updateText(value),
+                  autocorrect: true,
+                  enableSuggestions: true,
+                  cursorColor: Colors.red,
+                  cursorHeight: 16.0,
+                  cursorRadius: Radius.circular(90),
+                  cursorWidth: 16.0,
+                  obscureText: false,
+                  keyboardType: TextInputType.emailAddress,
+                  keyboardAppearance: Brightness.light,
+                  minLines: 1,
+                  maxLines: 3,
+                  maxLength: 100,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                focusNode: _passwordFocusNode,
-                controller: _passwordController,
-                onChanged: (value) => _updateText(value),
-                autocorrect: false,
-                cursorColor: Colors.red,
-                cursorHeight: 2.0,
-                cursorRadius: Radius.circular(90),
-                cursorWidth: 16.0,
-                obscureText: true,
-                textCapitalization: TextCapitalization.sentences,
-                keyboardType: TextInputType.text,
-                autofocus: true,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp('[a-z]')),
-                  LengthLimitingTextInputFormatter(8),
-                ],
+              Text(
+                _text,
+                style: TextStyle(color: Colors.black),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // _cpfFocusNode.requestFocus();
-                FocusScope.of(context).unfocus();
-              },
-              child: Text("Entrar"),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  focusNode: _passwordFocusNode,
+                  controller: _passwordController,
+                  onChanged: (value) => _updateText(value),
+                  autocorrect: false,
+                  cursorColor: Colors.red,
+                  cursorHeight: 2.0,
+                  cursorRadius: Radius.circular(90),
+                  cursorWidth: 16.0,
+                  obscureText: true,
+                  textCapitalization: TextCapitalization.sentences,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.go,
+                  autofocus: true,
+                  onEditingComplete: () =>
+                      _updateText(_passwordController.text),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-z]')),
+                    LengthLimitingTextInputFormatter(8),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  FocusScope.of(context).unfocus();
+                  _cpfFocusNode.requestFocus();
+                },
+                child: Text("Entrar"),
+              ),
+            ],
+          ),
         ),
       ),
     );
