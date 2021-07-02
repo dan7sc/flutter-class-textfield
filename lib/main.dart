@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,13 +35,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _cpfController = TextEditingController();
-  // TextEditingController _cpfController =
-      // TextEditingController(text: "123.456.789-00");
   TextEditingController _passwordController = TextEditingController();
 
   void _updateText(String newText) {
     setState(() {
       text = newText;
+      // _passwordController =
+        // TextEditingController(text: _passwordController.text.toUpperCase());
     });
   }
 
@@ -48,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     Future.delayed(Duration(seconds: 2)).then((value) {
       _cpfController = TextEditingController(text: "123.456.789-00");
+      _emailController = TextEditingController(text: "dan@email.com");
       setState(() {});
     });
     super.initState();
@@ -84,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 cursorWidth: 16.0,
                 obscureText: false,
                 enabled: true,
+                keyboardType: TextInputType.number,
               ),
             ),
             Padding(
@@ -99,6 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 cursorRadius: Radius.circular(90),
                 cursorWidth: 16.0,
                 obscureText: false,
+                keyboardType: TextInputType.emailAddress,
               ),
             ),
             Padding(
@@ -109,15 +113,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 onChanged: (value) => _updateText(value),
                 autocorrect: false,
                 cursorColor: Colors.red,
-                cursorHeight: 16.0,
+                cursorHeight: 2.0,
                 cursorRadius: Radius.circular(90),
                 cursorWidth: 16.0,
                 obscureText: true,
+                textCapitalization: TextCapitalization.sentences,
+                keyboardType: TextInputType.text,
+                autofocus: true,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp('[a-z]')),
+                  LengthLimitingTextInputFormatter(8),
+                ],
               ),
             ),
             ElevatedButton(
               onPressed: () {
-                _emailFocusNode.requestFocus();
+                // _cpfFocusNode.requestFocus();
+                FocusScope.of(context).unfocus();
               },
               child: Text("Entrar"),
             ),
