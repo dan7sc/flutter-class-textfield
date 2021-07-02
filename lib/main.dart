@@ -27,7 +27,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String text = '';
+  String text = "";
+  FocusNode _focusNode = FocusNode();
 
   void _updateText(String newText) {
     setState(() {
@@ -55,7 +56,14 @@ class _MyHomePageState extends State<MyHomePage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                focusNode: _focusNode,
                 onChanged: (value) => _updateText(value),
+                autocorrect: false,
+                cursorColor: Colors.red,
+                cursorHeight: 16.0,
+                cursorRadius: Radius.circular(90),
+                cursorWidth: 16.0,
+                obscureText: false,
               ),
             ),
           ],
